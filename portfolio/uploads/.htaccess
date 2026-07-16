@@ -1,0 +1,8 @@
+# Disable PHP engine and prevent PHP execution in the uploads directory
+<FilesMatch "(?i)\.(php|php3|php4|php5|phtml|phps|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
