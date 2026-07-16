@@ -1,9 +1,18 @@
 <?php
-// Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'portfolio');
+// Database Configuration (Dynamic Environment Setup)
+if (!isset($_SERVER['HTTP_HOST']) || $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1' || str_contains($_SERVER['HTTP_HOST'], 'localhost')) {
+    // Localhost Environment
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+    define('DB_NAME', 'portfolio');
+} else {
+    // InfinityFree Production Environment
+    define('DB_HOST', 'sql103.infinityfree.com');
+    define('DB_USER', 'if0_37771869');
+    define('DB_PASS', '11102003joel');
+    define('DB_NAME', 'if0_37771869_portfolio');
+}
 
 try {
     // 1. Connect to MySQL server (without selecting DB to ensure DB can be created if missing)
