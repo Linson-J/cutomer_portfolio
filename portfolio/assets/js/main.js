@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingEffect();
     initSkillsAnimation();
     initContactForm();
+    initSkillModal();
 });
 
 /* --- Theme Handler --- */
@@ -97,7 +98,14 @@ function initTypingEffect() {
     if (!typingTextEl) return;
     
     const rawTitles = typingTextEl.getAttribute('data-titles');
-    const titles = rawTitles ? JSON.parse(rawTitles) : ['Full-Stack Developer', 'Software Architect', 'Designer'];
+    let titles = rawTitles ? JSON.parse(rawTitles) : ['Full-Stack Developer', 'Software Architect', 'Designer'];
+    
+    // Decode HTML entities (like &amp; or &#38;) so they are typed correctly as single characters
+    const txt = document.createElement('textarea');
+    titles = titles.map(title => {
+        txt.innerHTML = title;
+        return txt.value;
+    });
     
     let titleIndex = 0;
     let charIndex = 0;
@@ -225,4 +233,44 @@ function showToast(message, type = 'success') {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 4000);
+}
+
+/* --- Skill Details Modal Handler --- */
+function initSkillModal() {
+    const clickableSkills = document.querySelectorAll('.clickable-skill');
+    const modal = document.getElementById('skill-modal');
+    const modalName = document.getElementById('skill-modal-name');
+    const modalDesc = document.getElementById('skill-modal-desc');
+    const modalClose = document.getElementById('skill-modal-close');
+    const modalOverlay = document.getElementById('skill-modal-overlay');
+
+    if (!modal || clickableSkills.length === 0) return;
+
+    clickableSkills.forEach(skill => {
+        skill.addEventListener('click', () => {
+            const name = skill.getAttribute('data-name');
+            const desc = skill.getAttribute('data-description') || 'No additional details available for this skill.';
+            
+            modalName.textContent = name;
+            modalDesc.textContent = desc;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent main page scrolling
+        });
+    });
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+    
+    // Close modal on ESC key press
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
 }

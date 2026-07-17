@@ -45,7 +45,14 @@ $site_theme = $_SESSION['admin_theme'] ?? $admin_settings['default_theme'] ?? 'd
     <div class="admin-main">
         <!-- Admin Header -->
         <header class="admin-header">
-            <h2 class="header-title"><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'Dashboard'; ?></h2>
+            <div style="display: flex; align-items: center;">
+                <button class="admin-menu-toggle" id="admin-menu-toggle" aria-label="Toggle Sidebar">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h2 class="header-title"><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'Dashboard'; ?></h2>
+            </div>
             <div class="header-actions">
                 <a href="../" target="_blank" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.5rem;">
                     <!-- External Link Icon -->

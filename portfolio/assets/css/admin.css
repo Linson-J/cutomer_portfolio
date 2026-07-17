@@ -358,6 +358,8 @@ html[data-theme="light"] .admin-table tr:hover td {
 }
 
 .form-control {
+    width: 100%;
+    max-width: 100%;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -463,18 +465,111 @@ textarea.form-control {
     color: var(--text-primary);
 }
 
+/* --- Admin Menu Toggle (Mobile) --- */
+.admin-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-right: 0.75rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.admin-menu-toggle.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.admin-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.admin-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
 /* --- Responsive Layout --- */
 @media (max-width: 992px) {
+    .admin-menu-toggle {
+        display: flex;
+    }
+    
     .admin-sidebar {
         transform: translateX(-100%);
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 200; /* Float above the main content */
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
     }
+    
+    html[data-theme="light"] .admin-sidebar {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+    }
+    
     .admin-sidebar.active {
         transform: translateX(0);
     }
+    
     .admin-main {
         margin-left: 0;
     }
+    
+    .admin-header {
+        padding: 0 1.25rem;
+    }
+    
+    .admin-container {
+        padding: 1.5rem;
+    }
+    
+    .admin-card {
+        padding: 1.75rem;
+    }
+    
     .form-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-header {
+        height: 65px;
+        padding: 0 1rem;
+    }
+    
+    .header-actions {
+        /* Scale down/simplify header action button on mobile */
+        gap: 0.5rem;
+    }
+    
+    .admin-card {
+        padding: 1.25rem;
+    }
+    
+    .image-preview-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
     }
 }

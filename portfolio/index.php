@@ -42,7 +42,7 @@ try {
 // Fetch skills
 $skills = [];
 try {
-    $stmt = $pdo->query("SELECT name, level, category FROM skills ORDER BY category, level DESC");
+    $stmt = $pdo->query("SELECT name, level, category, description FROM skills ORDER BY category, level DESC");
     $skills = $stmt->fetchAll();
 } catch (Exception $e) {}
 
@@ -51,6 +51,13 @@ $projects = [];
 try {
     $stmt = $pdo->query("SELECT title, description, image, tech_stack, live_url, github_url FROM projects ORDER BY id DESC");
     $projects = $stmt->fetchAll();
+} catch (Exception $e) {}
+
+// Fetch hobbies
+$hobbies = [];
+try {
+    $stmt = $pdo->query("SELECT name, icon, description FROM hobbies ORDER BY id ASC");
+    $hobbies = $stmt->fetchAll();
 } catch (Exception $e) {}
 
 // Group skills by category
@@ -109,6 +116,30 @@ function getSocialIcon($platform) {
             return '<svg viewBox="0 0 24 24"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10-10-4.48-10-10 4.48-10 10-10zm0 1.8c-4.52 0-8.2 3.68-8.2 8.2 0 4.52 3.68 8.2 8.2 8.2 4.52 0 8.2-3.68 8.2-8.2 0-4.52-3.68-8.2-8.2-8.2zm0 2.2c1.77 0 3.2 1.43 3.2 3.2s-1.43 3.2-3.2 3.2-3.2-1.43-3.2-3.2 1.43-3.2 3.2-3.2zm0 1.5c-.94 0-1.7.76-1.7 1.7s.76 1.7 1.7 1.7 1.7-.76 1.7-1.7-.76-1.7-1.7-1.7z"/></svg>';
     }
 }
+
+// Helper function to return hobby icons
+function getHobbyIcon($icon) {
+    $icon = strtolower(trim($icon));
+    switch ($icon) {
+        case 'camera':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>';
+        case 'gamepad':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="3"></rect></svg>';
+        case 'code':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>';
+        case 'book':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>';
+        case 'music':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>';
+        case 'bike':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><circle cx="5.5" cy="17.5" r="2.5"></circle><circle cx="18.5" cy="17.5" r="2.5"></circle><path d="M15 6h5a1 1 0 0 1 1 1v2"></path><path d="M12 11.5L8.5 5.5H3"></path><path d="M12 11.5L9.5 17.5"></path><path d="M12 11.5h6.5L15 6"></path></svg>';
+        case 'travel':
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+        case 'heart':
+        default:
+            return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hobby-icon-svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="<?php echo htmlspecialchars($default_theme); ?>">
@@ -117,7 +148,7 @@ function getSocialIcon($platform) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?php echo htmlspecialchars($hero_name) . ' - ' . htmlspecialchars($hero_title) . ' | Portfolio'; ?>">
     <title><?php echo htmlspecialchars($site_name); ?></title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=1.1">
 </head>
 <body>
 
@@ -131,6 +162,7 @@ function getSocialIcon($platform) {
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             
@@ -216,7 +248,7 @@ function getSocialIcon($platform) {
                         <h3><?php echo htmlspecialchars($category); ?></h3>
                         <div class="skills-list">
                             <?php foreach ($categorySkills as $skill): ?>
-                                <div class="skill-item">
+                                <div class="skill-item clickable-skill" data-name="<?php echo htmlspecialchars($skill['name']); ?>" data-description="<?php echo htmlspecialchars($skill['description'] ?? ''); ?>">
                                     <div class="skill-info">
                                         <span class="skill-name"><?php echo htmlspecialchars($skill['name']); ?></span>
                                         <span class="skill-level-num"><?php echo htmlspecialchars($skill['level']); ?>%</span>
@@ -293,6 +325,28 @@ function getSocialIcon($platform) {
             <?php else: ?>
                 <div class="glass-card reveal" style="grid-column: 1 / -1; text-align: center;">
                     <p style="color: var(--text-secondary);">No projects added yet. Manage projects in the admin panel.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <!-- Hobbies Section -->
+    <section id="hobbies" class="container">
+        <h2 class="section-title reveal">Hobbies & Interests</h2>
+        <div class="hobbies-grid">
+            <?php if (!empty($hobbies)): ?>
+                <?php foreach ($hobbies as $hobby): ?>
+                    <div class="hobby-card glass-card reveal">
+                        <div class="hobby-icon-wrapper">
+                            <?php echo getHobbyIcon($hobby['icon']); ?>
+                        </div>
+                        <h3 class="hobby-name"><?php echo htmlspecialchars($hobby['name']); ?></h3>
+                        <p class="hobby-description"><?php echo htmlspecialchars($hobby['description']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="glass-card reveal" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <p style="color: var(--text-secondary);">No hobbies added yet. Manage hobbies in the admin panel.</p>
                 </div>
             <?php endif; ?>
         </div>
@@ -376,6 +430,17 @@ function getSocialIcon($platform) {
             </div>
         </div>
     </section>
+    <!-- Skill Details Modal -->
+    <div class="modal" id="skill-modal" aria-hidden="true">
+        <div class="modal-overlay" id="skill-modal-overlay"></div>
+        <div class="modal-container glass-card">
+            <button class="modal-close" id="skill-modal-close" aria-label="Close modal">&times;</button>
+            <h3 class="modal-title" id="skill-modal-name">Skill Name</h3>
+            <div class="modal-content">
+                <p class="modal-description" id="skill-modal-desc">Skill description goes here.</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -385,6 +450,6 @@ function getSocialIcon($platform) {
         </div>
     </footer>
 
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js?v=1.1"></script>
 </body>
 </html>

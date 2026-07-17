@@ -1,6 +1,10 @@
 <?php
 // Database Configuration (Dynamic Environment Setup)
-if (!isset($_SERVER['HTTP_HOST']) || $_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1' || str_contains($_SERVER['HTTP_HOST'], 'localhost')) {
+if (!isset($_SERVER['HTTP_HOST']) || 
+    $_SERVER['HTTP_HOST'] === 'localhost' || 
+    $_SERVER['HTTP_HOST'] === '127.0.0.1' || 
+    str_contains($_SERVER['HTTP_HOST'], 'localhost') || 
+    str_contains($_SERVER['HTTP_HOST'], '127.0.0.1')) {
     // Localhost Environment
     define('DB_HOST', 'localhost');
     define('DB_USER', 'root');
@@ -80,7 +84,8 @@ function checkAndInitDatabase($pdo) {
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
             level INT NOT NULL DEFAULT 0,
-            category VARCHAR(100) NOT NULL
+            category VARCHAR(100) NOT NULL,
+            description TEXT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
         CREATE TABLE IF NOT EXISTS contact_info (
@@ -107,6 +112,13 @@ function checkAndInitDatabase($pdo) {
         CREATE TABLE IF NOT EXISTS settings (
             setting_key VARCHAR(50) PRIMARY KEY,
             setting_value TEXT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+        CREATE TABLE IF NOT EXISTS hobbies (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            icon VARCHAR(50) NULL,
+            description VARCHAR(255) NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ";
         
@@ -150,16 +162,16 @@ function checkAndInitDatabase($pdo) {
         
         // Seed default skills
         $skills = [
-            ['HTML5 & CSS3', 95, 'Frontend'],
-            ['JavaScript (ES6+)', 92, 'Frontend'],
-            ['PHP (PDO & OOP)', 88, 'Backend'],
-            ['MySQL & Redis', 85, 'Backend'],
-            ['RESTful APIs', 90, 'Backend'],
-            ['Figma & UI Design', 82, 'Design']
+            ['HTML5 & CSS3', 95, 'Frontend', 'Expertise in modern CSS layout techniques including Grid, Flexbox, Custom Properties, and responsive media queries.'],
+            ['JavaScript (ES6+)', 92, 'Frontend', 'Proficient in vanilla ES6+ JS, covering asynchronous programming, custom DOM interactions, and API communication.'],
+            ['PHP (PDO & OOP)', 88, 'Backend', 'Developing scalable backend systems utilizing Object-Oriented principles, secure database preparation, and custom session middleware.'],
+            ['MySQL & Redis', 85, 'Backend', 'Designing optimized relational database schemas, handling complex joins, indexing, and utilizing Redis for caching.'],
+            ['RESTful APIs', 90, 'Backend', 'Designing and consuming HTTP endpoints with secure token/session authentication and JSON responses.'],
+            ['Figma & UI Design', 82, 'Design', 'Crafting modern UI layouts, design tokens, and components using Figma to establish clean design systems.']
         ];
-        $stmtSkill = $pdo->prepare("INSERT INTO skills (name, level, category) VALUES (?, ?, ?)");
+        $stmtSkill = $pdo->prepare("INSERT INTO skills (name, level, category, description) VALUES (?, ?, ?, ?)");
         foreach ($skills as $sk) {
-            $stmtSkill->execute([$sk[0], $sk[1], $sk[2]]);
+            $stmtSkill->execute([$sk[0], $sk[1], $sk[2], $sk[3]]);
         }
         
         // Seed default projects
@@ -184,6 +196,17 @@ function checkAndInitDatabase($pdo) {
         $stmtProj = $pdo->prepare("INSERT INTO projects (title, description, image, tech_stack, live_url, github_url) VALUES (?, ?, ?, ?, ?, ?)");
         foreach ($projects as $pr) {
             $stmtProj->execute([$pr[0], $pr[1], $pr[2], $pr[3], $pr[4], $pr[5]]);
+        }
+
+        // Seed default hobbies
+        $hobbies = [
+            ['Photography', 'camera', 'Capturing landscape and street photography.'],
+            ['Gaming', 'gamepad', 'Playing strategy and RPG games.'],
+            ['Open Source', 'code', 'Contributing to GitHub projects.']
+        ];
+        $stmtHobby = $pdo->prepare("INSERT INTO hobbies (name, icon, description) VALUES (?, ?, ?)");
+        foreach ($hobbies as $hb) {
+            $stmtHobby->execute([$hb[0], $hb[1], $hb[2]]);
         }
     }
 }

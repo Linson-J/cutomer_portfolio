@@ -2,7 +2,30 @@ document.addEventListener('DOMContentLoaded', () => {
     initAlertFading();
     initImagePreview();
     initDeleteConfirmations();
+    initAdminSidebar();
 });
+
+/* --- Mobile Admin Sidebar Toggle --- */
+function initAdminSidebar() {
+    const toggleBtn = document.getElementById('admin-menu-toggle');
+    const sidebar = document.getElementById('admin-sidebar');
+    
+    if (!toggleBtn || !sidebar) return;
+    
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('active');
+        toggleBtn.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking outside of it
+    document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== toggleBtn) {
+            sidebar.classList.remove('active');
+            toggleBtn.classList.remove('active');
+        }
+    });
+}
 
 /* --- Auto-fade Admin Alerts --- */
 function initAlertFading() {
