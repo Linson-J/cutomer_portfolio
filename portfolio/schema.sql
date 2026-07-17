@@ -1,8 +1,8 @@
 -- Database Schema for Portfolio Website
 -- Automatically created and populated by config/database.php on first run.
 
-CREATE DATABASE IF NOT EXISTS `portfolio` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `portfolio`;
+-- CREATE DATABASE IF NOT EXISTS `portfolio` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `portfolio`;
 
 -- 1. Admins Table
 CREATE TABLE IF NOT EXISTS `admins` (
