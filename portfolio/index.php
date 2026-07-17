@@ -160,9 +160,15 @@ function getHobbyIcon($icon) {
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="#hero" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
+                <?php if (!empty($skills)): ?>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                <?php endif; ?>
+                <?php if (!empty($projects)): ?>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                <?php endif; ?>
+                <?php if (!empty($hobbies)): ?>
+                    <li><a href="#hobbies" class="nav-link">Hobbies</a></li>
+                <?php endif; ?>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             
@@ -238,119 +244,107 @@ function getHobbyIcon($icon) {
         </div>
     </section>
 
+    <?php if (!empty($skills)): ?>
     <!-- Skills Section -->
     <section id="skills" class="container">
         <h2 class="section-title reveal">Skills & Expertise</h2>
         <div class="skills-grid">
-            <?php if (!empty($grouped_skills)): ?>
-                <?php foreach ($grouped_skills as $category => $categorySkills): ?>
-                    <div class="skill-category-card glass-card reveal">
-                        <h3><?php echo htmlspecialchars($category); ?></h3>
-                        <div class="skills-list">
-                            <?php foreach ($categorySkills as $skill): ?>
-                                <div class="skill-item clickable-skill" data-name="<?php echo htmlspecialchars($skill['name']); ?>" data-description="<?php echo htmlspecialchars($skill['description'] ?? ''); ?>">
-                                    <div class="skill-info">
-                                        <span class="skill-name"><?php echo htmlspecialchars($skill['name']); ?></span>
-                                        <span class="skill-level-num"><?php echo htmlspecialchars($skill['level']); ?>%</span>
-                                    </div>
-                                    <div class="skill-bar-bg">
-                                        <div class="skill-bar-fill" data-level="<?php echo htmlspecialchars($skill['level']); ?>"></div>
-                                    </div>
+            <?php foreach ($grouped_skills as $category => $categorySkills): ?>
+                <div class="skill-category-card glass-card reveal">
+                    <h3><?php echo htmlspecialchars($category); ?></h3>
+                    <div class="skills-list">
+                        <?php foreach ($categorySkills as $skill): ?>
+                            <div class="skill-item clickable-skill" data-name="<?php echo htmlspecialchars($skill['name']); ?>" data-description="<?php echo htmlspecialchars($skill['description'] ?? ''); ?>">
+                                <div class="skill-info">
+                                    <span class="skill-name"><?php echo htmlspecialchars($skill['name']); ?></span>
+                                    <span class="skill-level-num"><?php echo htmlspecialchars($skill['level']); ?>%</span>
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
+                                <div class="skill-bar-bg">
+                                    <div class="skill-bar-fill" data-level="<?php echo htmlspecialchars($skill['level']); ?>"></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="glass-card reveal" style="grid-column: 1 / -1; text-align: center;">
-                    <p style="color: var(--text-secondary);">No skills added yet. Manage skills in the admin panel.</p>
                 </div>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
+    <?php if (!empty($projects)): ?>
     <!-- Projects Section -->
     <section id="projects" class="container">
         <h2 class="section-title reveal">Selected Works</h2>
         <div class="projects-grid">
-            <?php if (!empty($projects)): ?>
-                <?php foreach ($projects as $project): ?>
-                    <div class="project-card glass-card reveal">
-                        <div class="project-image-container">
-                            <?php if (!empty($project['image']) && file_exists(__DIR__ . '/' . $project['image'])): ?>
-                                <img src="<?php echo htmlspecialchars($project['image']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-image">
-                            <?php else: ?>
-                                <div class="project-image-placeholder">
-                                    <!-- Dynamic Project Mockup Icon -->
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                                    </svg>
-                                </div>
-                            <?php endif; ?>
+            <?php foreach ($projects as $project): ?>
+                <div class="project-card glass-card reveal">
+                    <div class="project-image-container">
+                        <?php if (!empty($project['image']) && file_exists(__DIR__ . '/' . $project['image'])): ?>
+                            <img src="<?php echo htmlspecialchars($project['image']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-image">
+                        <?php else: ?>
+                            <div class="project-image-placeholder">
+                                <!-- Dynamic Project Mockup Icon -->
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="project-info">
+                        <h3 class="project-title"><?php echo htmlspecialchars($project['title']); ?></h3>
+                        <p class="project-desc"><?php echo htmlspecialchars($project['description']); ?></p>
+                        
+                        <div class="project-tech">
+                            <?php 
+                            $tags = explode(',', $project['tech_stack']);
+                            foreach ($tags as $tag): 
+                                if (trim($tag) === '') continue;
+                            ?>
+                                <span class="tech-tag"><?php echo htmlspecialchars(trim($tag)); ?></span>
+                            <?php endforeach; ?>
                         </div>
                         
-                        <div class="project-info">
-                            <h3 class="project-title"><?php echo htmlspecialchars($project['title']); ?></h3>
-                            <p class="project-desc"><?php echo htmlspecialchars($project['description']); ?></p>
-                            
-                            <div class="project-tech">
-                                <?php 
-                                $tags = explode(',', $project['tech_stack']);
-                                foreach ($tags as $tag): 
-                                    if (trim($tag) === '') continue;
-                                ?>
-                                    <span class="tech-tag"><?php echo htmlspecialchars(trim($tag)); ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            
-                            <div class="project-links">
-                                <?php if (!empty($project['live_url'])): ?>
-                                    <a href="<?php echo htmlspecialchars($project['live_url']); ?>" target="_blank" rel="noopener noreferrer" class="project-link">
-                                        Live Demo
-                                        <svg viewBox="0 0 24 24"><path d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.914 7 1.786 1.8 6.913-7 3.968 4v-9.8z"/></svg>
-                                    </a>
-                                <?php endif; ?>
-                                <?php if (!empty($project['github_url'])): ?>
-                                    <a href="<?php echo htmlspecialchars($project['github_url']); ?>" target="_blank" rel="noopener noreferrer" class="project-link">
-                                        Code
-                                        <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
+                        <div class="project-links">
+                            <?php if (!empty($project['live_url'])): ?>
+                                <a href="<?php echo htmlspecialchars($project['live_url']); ?>" target="_blank" rel="noopener noreferrer" class="project-link">
+                                    Live Demo
+                                    <svg viewBox="0 0 24 24"><path d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.914 7 1.786 1.8 6.913-7 3.968 4v-9.8z"/></svg>
+                                </a>
+                            <?php endif; ?>
+                            <?php if (!empty($project['github_url'])): ?>
+                                <a href="<?php echo htmlspecialchars($project['github_url']); ?>" target="_blank" rel="noopener noreferrer" class="project-link">
+                                    Code
+                                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="glass-card reveal" style="grid-column: 1 / -1; text-align: center;">
-                    <p style="color: var(--text-secondary);">No projects added yet. Manage projects in the admin panel.</p>
                 </div>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
+    <?php if (!empty($hobbies)): ?>
     <!-- Hobbies Section -->
     <section id="hobbies" class="container">
         <h2 class="section-title reveal">Hobbies & Interests</h2>
         <div class="hobbies-grid">
-            <?php if (!empty($hobbies)): ?>
-                <?php foreach ($hobbies as $hobby): ?>
-                    <div class="hobby-card glass-card reveal">
-                        <div class="hobby-icon-wrapper">
-                            <?php echo getHobbyIcon($hobby['icon']); ?>
-                        </div>
-                        <h3 class="hobby-name"><?php echo htmlspecialchars($hobby['name']); ?></h3>
-                        <p class="hobby-description"><?php echo htmlspecialchars($hobby['description']); ?></p>
+            <?php foreach ($hobbies as $hobby): ?>
+                <div class="hobby-card glass-card reveal">
+                    <div class="hobby-icon-wrapper">
+                        <?php echo getHobbyIcon($hobby['icon']); ?>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="glass-card reveal" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                    <p style="color: var(--text-secondary);">No hobbies added yet. Manage hobbies in the admin panel.</p>
+                    <h3 class="hobby-name"><?php echo htmlspecialchars($hobby['name']); ?></h3>
+                    <p class="hobby-description"><?php echo htmlspecialchars($hobby['description']); ?></p>
                 </div>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- Contact Section -->
     <section id="contact" class="container">
